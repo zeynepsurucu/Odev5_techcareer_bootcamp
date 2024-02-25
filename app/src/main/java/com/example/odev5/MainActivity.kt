@@ -2,6 +2,7 @@ package com.example.odev5
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.odev5.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -32,13 +33,17 @@ class MainActivity : AppCompatActivity() {
             when (button) {
                 binding.btnEqual -> {
                     button.setOnClickListener {
-                        numbers.addAll(
-                            binding.textViewIslemGoster.text.toString().split("+")
-                                .map { it.toInt() })
-                        val sum = numbers.sum()
-                        binding.textViewSonuc.text = sum.toString()
-                        numbers.clear()
-                        previousValue = null
+                        if (binding.textViewIslemGoster.text.toString().last() == '+') {
+                            Toast.makeText(this, "Son girilen karakter + olamaz", Toast.LENGTH_LONG).show()
+                        } else {
+                            numbers.addAll(
+                                binding.textViewIslemGoster.text.toString().split("+")
+                                    .map { it.toInt() })
+                            val sum = numbers.sum()
+                            binding.textViewSonuc.text = sum.toString()
+                            numbers.clear()
+                            previousValue = null
+                        }
                     }
                 }
 
@@ -55,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                     button.setOnClickListener {
                         val buttonText = button.text.toString()
 
-                        if (previousValue != buttonText) {
+                        if (binding.textViewIslemGoster.text.isNotBlank() && buttonText != previousValue) {
                             binding.textViewIslemGoster.text =
                                 "${binding.textViewIslemGoster.text}$buttonText"
                             previousValue = buttonText
